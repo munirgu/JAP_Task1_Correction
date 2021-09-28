@@ -34,7 +34,7 @@ namespace JAP_Task_Backend.Services
                     ReleaseDate = s.ReleaseDate,
                     ImageUrl = s.ImageUrl,
                     Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
-                    Actors = s.Actors.Select(x => x.Name).ToList()
+                    Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                 })
                 .OrderByDescending(o => o.Rating)
                 .Skip((currentPage - 1) * pageSize)
@@ -103,7 +103,7 @@ namespace JAP_Task_Backend.Services
                             ReleaseDate = s.ReleaseDate,
                             ImageUrl = s.ImageUrl,
                             Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
-                            Actors = s.Actors.Select(x => x.Name).ToList()
+                            Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
                         .ToList();
@@ -122,7 +122,7 @@ namespace JAP_Task_Backend.Services
                             ReleaseDate = s.ReleaseDate,
                             ImageUrl = s.ImageUrl,
                             Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
-                            Actors = s.Actors.Select(x => x.Name).ToList()
+                            Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
                         .ToList();
@@ -140,7 +140,7 @@ namespace JAP_Task_Backend.Services
                             ReleaseDate = s.ReleaseDate,
                             ImageUrl = s.ImageUrl,
                             Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
-                            Actors = s.Actors.Select(x => x.Name).ToList()
+                            Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
                         .ToList();
@@ -158,7 +158,7 @@ namespace JAP_Task_Backend.Services
                             ReleaseDate = s.ReleaseDate,
                             ImageUrl = s.ImageUrl,
                             Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
-                            Actors = s.Actors.Select(x => x.Name).ToList()
+                            Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
                         .ToList();
@@ -177,7 +177,7 @@ namespace JAP_Task_Backend.Services
                             ReleaseDate = s.ReleaseDate,
                             ImageUrl = s.ImageUrl,
                             Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
-                            Actors = s.Actors.Select(x => x.Name).ToList()
+                            Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
                         .ToList();
