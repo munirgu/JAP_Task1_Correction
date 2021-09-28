@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Services
 {
@@ -20,7 +21,7 @@ namespace JAP_Task_Backend.Services
             _context = context;
         }
 
-        public List<VideoDto> GetTopTenVideos(VideoType videoType, int currentPage = 1)
+        public async Task<List<VideoDto>> GetTopTenVideos(VideoType videoType, int currentPage = 1)
         {
             if (currentPage < 1)
                 currentPage = 1;
@@ -43,7 +44,7 @@ namespace JAP_Task_Backend.Services
             return videos;
         }
 
-        public List<VideoDto> SearchMovies(VideoType videoType, string quickSearch)
+        public async Task<List<VideoDto>> SearchMovies(VideoType videoType, string quickSearch)
         {
             List<VideoDto> videos = new List<VideoDto>();
             // at least X stars
@@ -52,7 +53,7 @@ namespace JAP_Task_Backend.Services
                 quickSearch = quickSearch.ToLower().Replace("at least ", "").Replace(" stars", "");
                 if (int.TryParse(quickSearch, out int score))
                 {
-                    videos = SearchByAtLeastRating(videoType, score);
+                    videos = await SearchByAtLeastRating(videoType, score);
                 }
             }
             // ends with stars (X stars)
@@ -61,7 +62,7 @@ namespace JAP_Task_Backend.Services
                 quickSearch = quickSearch.ToLower().Replace(" stars", "");
                 if (int.TryParse(quickSearch, out int score))
                 {
-                    videos = SearchByRating(videoType, score);
+                    videos = await SearchByRating (videoType, score);
                 }
             }
             // after years
@@ -70,7 +71,7 @@ namespace JAP_Task_Backend.Services
                 quickSearch = quickSearch.ToLower().Replace("after ", "");
                 if (int.TryParse(quickSearch, out int score))
                 {
-                    videos = SearchByAfterYear(videoType, score);
+                    videos = await SearchByAfterYear(videoType, score);
                 }
             }
             // older than X years
@@ -79,17 +80,17 @@ namespace JAP_Task_Backend.Services
                 quickSearch = quickSearch.ToLower().Replace("older than ", "").Replace(" years", "");
                 if (int.TryParse(quickSearch, out int score))
                 {
-                    videos = SearchByOlderThanYears(videoType, score);
+                    videos = await SearchByOlderThanYears(videoType, score);
                 }
             }
             else
             {
-                videos = SearchByTitleAndDescription(videoType, quickSearch);
+                videos = await SearchByTitleAndDescription(videoType, quickSearch);
             }
 
             return videos;
         }
-        private List<VideoDto> SearchByTitleAndDescription(VideoType videoType, string quickSearch)
+        private async Task<List<VideoDto>> SearchByTitleAndDescription(VideoType videoType, string quickSearch)
         {
             return _context.Videos
                         .Where(w => w.Type == videoType &&
@@ -109,7 +110,7 @@ namespace JAP_Task_Backend.Services
                         .ToList();
         }
 
-        private List<VideoDto> SearchByAtLeastRating(VideoType videoType, int score)
+        private async Task<List<VideoDto>> SearchByAtLeastRating(VideoType videoType, int score)
         {
             return _context.Videos
                         .Where(w => w.Type == videoType &&
@@ -127,7 +128,7 @@ namespace JAP_Task_Backend.Services
                         .OrderByDescending(o => o.Rating)
                         .ToList();
         }
-        private List<VideoDto> SearchByRating(VideoType videoType, int score)
+        private async Task<List<VideoDto>> SearchByRating(VideoType videoType, int score)
         {
             return _context.Videos
                         .Where(w => w.Type == videoType &&
@@ -145,7 +146,7 @@ namespace JAP_Task_Backend.Services
                         .OrderByDescending(o => o.Rating)
                         .ToList();
         }
-        private List<VideoDto> SearchByAfterYear(VideoType videoType, int year)
+        private async Task<List<VideoDto>> SearchByAfterYear(VideoType videoType, int year)
         {
             return _context.Videos
                         .Where(w => w.Type == videoType &&
@@ -164,7 +165,7 @@ namespace JAP_Task_Backend.Services
                         .ToList();
         }
 
-        private List<VideoDto> SearchByOlderThanYears(VideoType videoType, int years)
+        private async Task<List<VideoDto>> SearchByOlderThanYears(VideoType videoType, int years)
         {
             return _context.Videos
                         .Where(w => w.Type == videoType &&

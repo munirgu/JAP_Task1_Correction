@@ -2,7 +2,7 @@
 using JAP_Task_Backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
-
+using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Controllers
 {
@@ -16,29 +16,28 @@ namespace JAP_Task_Backend.Controllers
 
             _videoService = videoService;
         }
-
         [HttpGet("get-top-ten-movies")]
-        public IActionResult GetTopTenMovies(int currentPage)
+        public async Task<IActionResult> GetTopTenMovies(int currentPage)
         {
-            return Ok(_videoService.GetTopTenVideos(VideoType.Movie,currentPage));
+            return Ok(await _videoService.GetTopTenVideos(VideoType.Movie,currentPage));
         }
 
         [HttpGet("get-top-ten-shows")]
-        public IActionResult GetTopTenShows(int currentPage)
+        public async Task<IActionResult> GetTopTenShows(int currentPage)
         {
-            return Ok(_videoService.GetTopTenVideos(VideoType.TvShow, currentPage));
+            return Ok(await _videoService.GetTopTenVideos(VideoType.TvShow, currentPage));
         }
 
         [HttpGet("search-movie-videos")]
-        public IActionResult SearchMovies(string quickSearch)
+        public async Task<IActionResult> SearchMovies(string quickSearch)
         {
-            return Ok(_videoService.SearchMovies(VideoType.Movie,quickSearch ));
+            return Ok(await _videoService.SearchMovies(VideoType.Movie,quickSearch ));
         }
 
         [HttpGet("search-show-videos")]
-        public IActionResult SearchTvShows(string quickSearch)
+        public async Task<IActionResult> SearchTvShows(string quickSearch)
         {
-            return Ok(_videoService.SearchMovies(VideoType.TvShow, quickSearch));
+            return Ok(await _videoService.SearchMovies(VideoType.TvShow, quickSearch));
         }
         
         [HttpPost("rate-video")]
