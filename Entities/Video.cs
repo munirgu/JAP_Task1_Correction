@@ -12,11 +12,8 @@ namespace JAP_Task_Backend.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime ReleaseDate { get; set; }
-
         public VideoType Type { get; set; }
-
         public string ImageUrl { get; set; }
-
         public List<VideoActor> Actors { get; set; }
         public List<Rating> Ratings { get; set; }
     

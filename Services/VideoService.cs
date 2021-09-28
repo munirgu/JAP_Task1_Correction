@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Services
 {
@@ -43,7 +42,6 @@ namespace JAP_Task_Backend.Services
                 .ToList();
             return videos;
         }
-
 
         public List<VideoDto> SearchMovies(VideoType videoType, string quickSearch)
         {
@@ -184,7 +182,6 @@ namespace JAP_Task_Backend.Services
                         .OrderByDescending(o => o.Rating)
                         .ToList();
         }
-
         public void RateVideo(int id, int score)
         {
             var rating = new Rating()
@@ -271,7 +268,6 @@ namespace JAP_Task_Backend.Services
                     }
                 }
             }
-
             _context.SaveChanges();
         }
     }

@@ -1124,7 +1124,6 @@ namespace JAP_Task_Backend.Database
             );
             #endregion
 
-
             /// Actors and related movies and Tv Shows
             #region VideosActors Data
             modelBuilder.Entity<VideoActor>().HasData(
