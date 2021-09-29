@@ -9,7 +9,7 @@ namespace JAP_Task_Backend.Controllers
 {
 
     [ApiController]
-    [Route("controller")]
+    [Route("Auth")]
     public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepo;
@@ -26,6 +26,15 @@ namespace JAP_Task_Backend.Controllers
                 new User { Username = request.Username }, request.Password
                 );
 
+            return Ok(response);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(UserLoginDto request)
+        {
+            var response = await _authRepo.Login(
+                request.Username, request.Password
+                );
             return Ok(response);
         }
     }

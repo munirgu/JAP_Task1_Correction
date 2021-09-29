@@ -12,21 +12,37 @@ namespace JAP_Task_Backend.Services
     public class AuthRepository : IAuthRepository
     {
         private readonly ApplicationDbContext _context;
+
         public AuthRepository(ApplicationDbContext context)
         {
             _context = context;
         }
-        public Task<string> Login(string username, string password)
+        public async Task<string> Login(string username, string password)
         {
-            throw new NotImplementedException();
-        }
+            User user = await _context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToUpper()));
+            if (user == null)
+            {
+                throw new Exception("User not found");
 
+            }
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
+                throw new Exception("Wrong password");
+            }
+            else
+            {
+                return user.Id.ToString();
+            }
+
+        }
+    
         public async Task<int> Register(User user, string password)
         {
             if(await UserExists(user.Username))
             {
-                throw new Exception("User already exists");
+                throw new Exception("User already exist");
             }
+          
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -50,6 +66,22 @@ namespace JAP_Task_Backend.Services
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     }
