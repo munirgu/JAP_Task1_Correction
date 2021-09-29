@@ -34,6 +34,7 @@ namespace JAP_Task_Backend
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
         }
 
 

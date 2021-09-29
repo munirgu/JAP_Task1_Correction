@@ -1,3 +1,4 @@
+using JAP_Task_Backend.Entities;
 using JAP_Task_Backend.Enums;
 using JAP_Task_Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace JAP_Task_Backend.Database
         public DbSet<TopTenMoviesByScreenings> TopTenMoviesByScreenings { get; set; }
         public DbSet<TopMoviesByMostSoldTickets> TopMoviesByMostSoldTickets { get; set; }
         public DbSet<Screening> Screenings { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

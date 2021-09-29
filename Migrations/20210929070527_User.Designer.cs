@@ -4,14 +4,16 @@ using JAP_Task_Backend.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JAP_Task_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210929070527_User")]
+    partial class User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1506,14 +1508,9 @@ namespace JAP_Task_Backend.Migrations
                     b.Property<int>("VideoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("VideoId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("Ratings");
 
@@ -3553,12 +3550,6 @@ namespace JAP_Task_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JAP_Task_Backend.Entities.User", "user")
-                        .WithMany("Ratings")
-                        .HasForeignKey("userId");
-
-                    b.Navigation("user");
-
                     b.Navigation("Video");
                 });
 
@@ -3571,11 +3562,6 @@ namespace JAP_Task_Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Video");
-                });
-
-            modelBuilder.Entity("JAP_Task_Backend.Entities.User", b =>
-                {
-                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("JAP_Task_Backend.Models.Video", b =>
