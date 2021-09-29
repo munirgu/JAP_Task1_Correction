@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JAP_Task_Backend.Controllers
 {
     [ApiController]
-    [Route("videos")]
+    [Route("api/videos")]
     public class VideosController : Controller
     {
         private readonly IVideoService _videoService;

@@ -25,7 +25,7 @@ namespace JAP_Task_Backend.Services
         {
             if (currentPage < 1)
                 currentPage = 1;
-            var videos = _context.Videos
+            var videos =_context.Videos
                 .Where(w => w.Type == videoType)
                 .Select(s => new VideoDto
                 {
