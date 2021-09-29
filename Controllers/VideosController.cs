@@ -1,11 +1,13 @@
 ﻿using JAP_Task_Backend.Enums;
 using JAP_Task_Backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/videos")]
     public class VideosController : Controller
