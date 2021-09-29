@@ -2,9 +2,14 @@
 using JAP_Task_Backend.Entities;
 using JAP_Task_Backend.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Services
@@ -12,30 +17,40 @@ namespace JAP_Task_Backend.Services
     public class AuthRepository : IAuthRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthRepository(ApplicationDbContext context)
+        public AuthRepository(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+        }
+        public class CustomException : Exception
+        {
+            public CustomException(string message)
+               : base(message)
+            {
+            }
         }
         public async Task<string> Login(string username, string password)
         {
             User user = await _context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToUpper()));
             if (user == null)
             {
-                throw new Exception("User not found");
+                throw new CustomException("User not found");
 
             }
             else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
-                throw new Exception("Wrong password");
+                throw new CustomException("Wrong password");
             }
             else
             {
-                return user.Id.ToString();
+                return CreateToken(user);
             }
 
         }
-    
+     
+
         public async Task<int> Register(User user, string password)
         {
             if(await UserExists(user.Username))
@@ -83,6 +98,32 @@ namespace JAP_Task_Backend.Services
                 }
                 return true;
             }
+        }
+        private string CreateToken(User user)
+        {
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+           
         }
     }
 }
