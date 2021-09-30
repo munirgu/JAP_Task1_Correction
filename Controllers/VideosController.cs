@@ -42,34 +42,34 @@ namespace JAP_Task_Backend.Controllers
         }
 
         [HttpPost("buy-ticket")]
-        public IActionResult BuyTicket(int screeningId, int numberOfTickets)
+        public async Task<IActionResult> BuyTicket(int screeningId, int numberOfTickets)
         {
-            _videoService.BuyTicket(screeningId, numberOfTickets);
+            await _videoService.BuyTicket(screeningId, numberOfTickets);
             return Ok();
         }
 
         [HttpGet("top-ten-movies-by-ratings")]
-        public IActionResult GetTopTenMoviesByRatings()
+        public async Task<IActionResult> GetTopTenMoviesByRatings()
         {
-            return Ok(_videoService.GetTopTenMoviesByRatings());
+            return Ok(await _videoService.GetTopTenMoviesByRatings());
         }
 
         [HttpGet("top-ten-movies-by-screenings")]
-        public IActionResult GetTopTenMoviesByScreenings(DateTime startDate, DateTime endDate)
+        public async Task <IActionResult> GetTopTenMoviesByScreenings(DateTime startDate, DateTime endDate)
         {
-            return Ok(_videoService.GetTopTenMoviesByScreenings(startDate, endDate));
+            return Ok(await _videoService.GetTopTenMoviesByScreenings(startDate, endDate));
         }
 
         [HttpGet("top-movies-by-most-sold-tickets")]
-        public IActionResult GetTopMoviesByMostSoldTickets()
+        public async Task<IActionResult> GetTopMoviesByMostSoldTickets()
         {
-            return Ok(_videoService.GetTopMoviesByMostSoldTickets());
+            return Ok(await _videoService.GetTopMoviesByMostSoldTickets());
         }
 
         [HttpPost("insert-screening-data")]
-        public IActionResult InsertScreeningData()
+        public async Task<IActionResult> InsertScreeningData()
         {
-            _videoService.InsertScreeningData();
+            await _videoService.InsertScreeningData();
             return Ok();
         }
     }

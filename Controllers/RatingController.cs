@@ -1,6 +1,7 @@
 ﻿using JAP_Task_Backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Controllers
 {
@@ -16,9 +17,9 @@ namespace JAP_Task_Backend.Controllers
         }
 
         [HttpPost("rate-video")]
-        public IActionResult RateVideo(int id, int score)
+        public async Task<IActionResult> RateVideo(int id, int score)
         {
-            _ratingService.RateVideo(id, score);
+            await _ratingService.RateVideo(id, score);
             return Ok();
         }
     }

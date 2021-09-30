@@ -11,13 +11,12 @@ namespace JAP_Task_Backend.Interfaces
     {
         Task <List<VideoDto>> GetTopTenVideos(VideoType videoType, int currentPage);
         Task <List<VideoDto>> SearchMovies(VideoType videoType,string quickSearch);
-        //void RateVideo(int id, int score);
-        void BuyTicket(int screeningId, int numberOfTickets);
+        Task BuyTicket(int screeningId, int numberOfTickets);
         // Procedures
-        List<TopTenMoviesByRatings> GetTopTenMoviesByRatings();
-        List<TopTenMoviesByScreenings> GetTopTenMoviesByScreenings(DateTime startDate, DateTime endDate);
-        List<TopMoviesByMostSoldTickets> GetTopMoviesByMostSoldTickets();
+        Task <List<TopTenMoviesByRatings>>GetTopTenMoviesByRatings();
+        Task <List<TopTenMoviesByScreenings>> GetTopTenMoviesByScreenings(DateTime startDate, DateTime endDate);
+        Task <List<TopMoviesByMostSoldTickets>> GetTopMoviesByMostSoldTickets();
         // Test data
-        void InsertScreeningData();
+        Task InsertScreeningData();
     }
 }

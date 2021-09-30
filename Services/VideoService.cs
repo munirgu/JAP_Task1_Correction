@@ -25,7 +25,7 @@ namespace JAP_Task_Backend.Services
         {
             if (currentPage < 1)
                 currentPage = 1;
-            var videos =_context.Videos
+            var videos =await _context.Videos
                 .Where(w => w.Type == videoType)
                 .Select(s => new VideoDto
                 {
@@ -40,7 +40,7 @@ namespace JAP_Task_Backend.Services
                 .OrderByDescending(o => o.Rating)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToListAsync();
             return videos;
         }
 
@@ -92,7 +92,7 @@ namespace JAP_Task_Backend.Services
         }
         private async Task<List<VideoDto>> SearchByTitleAndDescription(VideoType videoType, string quickSearch)
         {
-            return _context.Videos
+            return await _context.Videos
                         .Where(w => w.Type == videoType &&
                                 (w.Title.ToLower().Contains(quickSearch.ToLower()) ||
                                 w.Description.ToLower().Contains(quickSearch.ToLower())))
@@ -107,12 +107,12 @@ namespace JAP_Task_Backend.Services
                             Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
-                        .ToList();
+                        .ToListAsync();
         }
 
         private async Task<List<VideoDto>> SearchByAtLeastRating(VideoType videoType, int score)
         {
-            return _context.Videos
+            return await _context.Videos
                         .Where(w => w.Type == videoType &&
                                     w.Ratings.Average(a => a.Score) >= score)
                         .Select(s => new VideoDto
@@ -126,11 +126,11 @@ namespace JAP_Task_Backend.Services
                             Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
-                        .ToList();
+                        .ToListAsync();
         }
         private async Task<List<VideoDto>> SearchByRating(VideoType videoType, int score)
         {
-            return _context.Videos
+            return await _context.Videos
                         .Where(w => w.Type == videoType &&
                                     w.Ratings.Average(a => a.Score) == score)
                         .Select(s => new VideoDto
@@ -144,11 +144,11 @@ namespace JAP_Task_Backend.Services
                             Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
-                        .ToList();
+                        .ToListAsync();
         }
         private async Task<List<VideoDto>> SearchByAfterYear(VideoType videoType, int year)
         {
-            return _context.Videos
+            return await _context.Videos
                         .Where(w => w.Type == videoType &&
                                     w.ReleaseDate.Year > year)
                         .Select(s => new VideoDto
@@ -162,12 +162,12 @@ namespace JAP_Task_Backend.Services
                             Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
-                        .ToList();
+                        .ToListAsync();
         }
 
         private async Task<List<VideoDto>> SearchByOlderThanYears(VideoType videoType, int years)
         {
-            return _context.Videos
+            return await _context.Videos
                         .Where(w => w.Type == videoType &&
                                     w.ReleaseDate < DateTime.Now.AddYears(-years))
                         .Select(s => new VideoDto
@@ -181,21 +181,12 @@ namespace JAP_Task_Backend.Services
                             Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
                         })
                         .OrderByDescending(o => o.Rating)
-                        .ToList();
+                        .ToListAsync();
         }
-       // public void RateVideo(int id, int score)
-       // {
-       //     var rating = new Rating()
-       //     {
-       //         VideoId = id,
-       //         Score = score
-       //     };
-       //     _context.Ratings.Add(rating);
-       //     _context.SaveChanges();
-       // }
-        public void BuyTicket(int screeningId, int numberOfTickets)
+        public async Task BuyTicket(int screeningId, int numberOfTickets)
         {
-            var screening = _context.Screenings.FirstOrDefault(x => x.Id == screeningId);
+            var screening = await _context.Screenings.FirstOrDefaultAsync(x => x.Id == screeningId);
+
             if (screening == null)
             {
                 throw new Exception("Screening doesn't exist.");
@@ -213,39 +204,39 @@ namespace JAP_Task_Backend.Services
 
             screening.AvailableTickets = screening.AvailableTickets - numberOfTickets;
             screening.SoldTickets = screening.SoldTickets + numberOfTickets;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public List<TopTenMoviesByRatings> GetTopTenMoviesByRatings()
+        public  async Task<List<TopTenMoviesByRatings>> GetTopTenMoviesByRatings()
         {
-            List<TopTenMoviesByRatings> result = _context.TopTenMoviesByRatings
+            List<TopTenMoviesByRatings> result =await _context.TopTenMoviesByRatings
                 .FromSqlRaw("EXEC [dbo].[GetTopTenMovies]")
-                .ToList();
+                .ToListAsync();
 
             return result;
         }
-        public List<TopTenMoviesByScreenings> GetTopTenMoviesByScreenings(DateTime startDate, DateTime endDate)
+        public async Task<List<TopTenMoviesByScreenings>> GetTopTenMoviesByScreenings(DateTime startDate, DateTime endDate)
         {
-            List<TopTenMoviesByScreenings> result = _context.TopTenMoviesByScreenings
+            List<TopTenMoviesByScreenings> result = await _context.TopTenMoviesByScreenings
                 .FromSqlRaw("EXEC [dbo].[GetTopTenMoviesByScreenings] @StartDate={0}, @EndDate={1}", startDate, endDate)
-                .ToList();
+                .ToListAsync();
 
             return result;
         }
-        public List<TopMoviesByMostSoldTickets> GetTopMoviesByMostSoldTickets()
+        public async Task<List<TopMoviesByMostSoldTickets>> GetTopMoviesByMostSoldTickets()
         {
-            List<TopMoviesByMostSoldTickets> result = _context.TopMoviesByMostSoldTickets
+            List<TopMoviesByMostSoldTickets> result = await _context.TopMoviesByMostSoldTickets
                 .FromSqlRaw("EXEC [dbo].[GetTopMoviesByMostSoldTickets]")
-                .ToList();
+                .ToListAsync();
 
             return result;
         }
-        public void InsertScreeningData()
+        public async Task InsertScreeningData()
         {
-            if (_context.Screenings.Any()) return;
+            if (await _context.Screenings.AnyAsync()) return;
 
-            var movies = _context.Videos
+            var movies = await _context.Videos
                 .Where(w => w.Type == VideoType.Movie)
-                .ToList();
+                .ToListAsync();
 
             foreach (var movie in movies)
             {
@@ -265,11 +256,11 @@ namespace JAP_Task_Backend.Services
                         };
 
                         screening.DateAndTime = screening.DateAndTime.AddHours(_random.Next(17, 23));
-                        _context.Screenings.Add(screening);
+                        await _context.Screenings.AddAsync(screening);
                     }
                 }
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
