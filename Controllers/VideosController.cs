@@ -1,6 +1,5 @@
 ﻿using JAP_Task_Backend.Enums;
 using JAP_Task_Backend.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -13,11 +12,11 @@ namespace JAP_Task_Backend.Controllers
     public class VideosController : Controller
     {
         private readonly IVideoService _videoService;
-
         public VideosController (IVideoService videoService) {
 
             _videoService = videoService;
         }
+
         [HttpGet("get-top-ten-movies")]
         public async Task<IActionResult> GetTopTenMovies(int currentPage)
         {
@@ -41,13 +40,6 @@ namespace JAP_Task_Backend.Controllers
         {
             return Ok(await _videoService.SearchMovies(VideoType.TvShow, quickSearch));
         }
-        
-       //[HttpPost("rate-video")]
-       //public IActionResult RateVideo(int id, int score)
-       //{
-       //    _videoService.RateVideo(id, score);
-       //    return Ok();
-       //}
 
         [HttpPost("buy-ticket")]
         public IActionResult BuyTicket(int screeningId, int numberOfTickets)

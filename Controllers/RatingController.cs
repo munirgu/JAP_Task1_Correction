@@ -1,10 +1,6 @@
 ﻿using JAP_Task_Backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Controllers
 {
@@ -14,10 +10,8 @@ namespace JAP_Task_Backend.Controllers
     public class RatingController : Controller
     {
         private readonly IRatingService _ratingService;
-
         public RatingController(IRatingService ratingService)
         {
-
             _ratingService = ratingService;
         }
 

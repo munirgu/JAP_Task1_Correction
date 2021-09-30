@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +17,6 @@ namespace JAP_Task_Backend.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-
         public AuthRepository(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
@@ -47,17 +45,13 @@ namespace JAP_Task_Backend.Services
             {
                 return CreateToken(user);
             }
-
         }
-     
-
         public async Task<int> Register(User user, string password)
         {
             if(await UserExists(user.Username))
             {
                 throw new Exception("User already exist");
             }
-          
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -65,7 +59,6 @@ namespace JAP_Task_Backend.Services
             _context.Users.Add(user);
             return await _context.SaveChangesAsync();
         }
-
         public async Task<bool> UserExists(string username)
         {
             if(await _context.Users.AnyAsync(x => x.Username.ToLower().Equals(username.ToLower())))
@@ -74,7 +67,6 @@ namespace JAP_Task_Backend.Services
             }
              return false;
         }       
-
         public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())

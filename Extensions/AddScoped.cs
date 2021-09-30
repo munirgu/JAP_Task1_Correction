@@ -6,7 +6,6 @@ namespace JAP_Task_Backend.Extensions
 {
     public class AddScoped
     {
-
         public static void AddScopedConfiguration(IServiceCollection services)
         {
             services.AddScoped<IVideoService, VideoService>();

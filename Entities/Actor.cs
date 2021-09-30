@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JAP_Task_Backend.Models
+﻿namespace JAP_Task_Backend.Models
 {
     public class Actor
     {
@@ -12,6 +7,5 @@ namespace JAP_Task_Backend.Models
         public Video Video { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
     }
 }

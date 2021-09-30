@@ -1,5 +1,4 @@
-﻿using System;
-namespace JAP_Task_Backend.Models
+﻿namespace JAP_Task_Backend.Models
 {
     public class TopTenMoviesByRatings
     {

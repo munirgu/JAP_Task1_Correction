@@ -10,7 +10,6 @@ namespace JAP_Task_Backend.Database
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-
         }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Actor> VideoActors { get; set; }
@@ -28,7 +27,5 @@ namespace JAP_Task_Backend.Database
             modelBuilder.Entity<TopTenMoviesByScreenings>().HasNoKey().ToView("TopTenMoviesByScreenings");
             modelBuilder.Entity<TopMoviesByMostSoldTickets>().HasNoKey().ToView("TopMoviesByMostSoldTickets");
         }
-
     }
-
 }

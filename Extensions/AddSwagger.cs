@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Extensions
 {
@@ -12,7 +8,6 @@ namespace JAP_Task_Backend.Extensions
     {
         public static void AddSwaggerConfig(IServiceCollection services)
         {
-
             services.AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = "JAP_Task1_Correction", Version = "v1" });
@@ -27,5 +22,4 @@ namespace JAP_Task_Backend.Extensions
                 });
         }
     }
-
 }

@@ -1,8 +1,6 @@
 ﻿using JAP_Task_Backend.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Models
 {
@@ -16,8 +14,5 @@ namespace JAP_Task_Backend.Models
         public string ImageUrl { get; set; }
         public List<Actor> Actors { get; set; }
         public List<Rating> Ratings { get; set; }
-
-
-
     }
 }
