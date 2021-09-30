@@ -11,7 +11,7 @@ namespace JAP_Task_Backend.Interfaces
     {
         Task <List<VideoDto>> GetTopTenVideos(VideoType videoType, int currentPage);
         Task <List<VideoDto>> SearchMovies(VideoType videoType,string quickSearch);
-        void RateVideo(int id, int score);
+        //void RateVideo(int id, int score);
         void BuyTicket(int screeningId, int numberOfTickets);
         // Procedures
         List<TopTenMoviesByRatings> GetTopTenMoviesByRatings();

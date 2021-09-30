@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JAP_Task_Backend.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/videos")]
     public class VideosController : Controller
@@ -42,12 +42,12 @@ namespace JAP_Task_Backend.Controllers
             return Ok(await _videoService.SearchMovies(VideoType.TvShow, quickSearch));
         }
         
-        [HttpPost("rate-video")]
-        public IActionResult RateVideo(int id, int score)
-        {
-            _videoService.RateVideo(id, score);
-            return Ok();
-        }
+       //[HttpPost("rate-video")]
+       //public IActionResult RateVideo(int id, int score)
+       //{
+       //    _videoService.RateVideo(id, score);
+       //    return Ok();
+       //}
 
         [HttpPost("buy-ticket")]
         public IActionResult BuyTicket(int screeningId, int numberOfTickets)

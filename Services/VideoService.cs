@@ -183,16 +183,16 @@ namespace JAP_Task_Backend.Services
                         .OrderByDescending(o => o.Rating)
                         .ToList();
         }
-        public void RateVideo(int id, int score)
-        {
-            var rating = new Rating()
-            {
-                VideoId = id,
-                Score = score
-            };
-            _context.Ratings.Add(rating);
-            _context.SaveChanges();
-        }
+       // public void RateVideo(int id, int score)
+       // {
+       //     var rating = new Rating()
+       //     {
+       //         VideoId = id,
+       //         Score = score
+       //     };
+       //     _context.Ratings.Add(rating);
+       //     _context.SaveChanges();
+       // }
         public void BuyTicket(int screeningId, int numberOfTickets)
         {
             var screening = _context.Screenings.FirstOrDefault(x => x.Id == screeningId);
