@@ -46,14 +46,16 @@ namespace JAP_Task_Backend.Services
 
         public async Task<List<VideoDto>> SearchMovies(VideoType videoType, string quickSearch)
         {
-            List<VideoDto> videos = new List<VideoDto>();
+            var query = _context.Videos
+                .Where(w => w.Type == videoType);
+
             // at least X stars
             if (quickSearch.ToLower().StartsWith("at least ") && quickSearch.ToLower().EndsWith(" stars"))
             {
                 quickSearch = quickSearch.ToLower().Replace("at least ", "").Replace(" stars", "");
                 if (int.TryParse(quickSearch, out int score))
                 {
-                    videos = await SearchByAtLeastRating(videoType, score);
+                    query = query.Where(w => w.Ratings.Average(a => a.Score) >= score);
                 }
             }
             // ends with stars (X stars)
@@ -62,31 +64,46 @@ namespace JAP_Task_Backend.Services
                 quickSearch = quickSearch.ToLower().Replace(" stars", "");
                 if (int.TryParse(quickSearch, out int score))
                 {
-                    videos = await SearchByRating (videoType, score);
+                    query = query.Where(w => w.Ratings.Average(a => a.Score) == score);
                 }
             }
             // after years
             else if (quickSearch.ToLower().StartsWith("after "))
             {
                 quickSearch = quickSearch.ToLower().Replace("after ", "");
-                if (int.TryParse(quickSearch, out int score))
+                if (int.TryParse(quickSearch, out int year))
                 {
-                    videos = await SearchByAfterYear(videoType, score);
+                    query = query.Where(w => w.ReleaseDate.Year > year);
                 }
             }
             // older than X years
             else if (quickSearch.ToLower().StartsWith("older than ") && quickSearch.ToLower().EndsWith(" years"))
             {
                 quickSearch = quickSearch.ToLower().Replace("older than ", "").Replace(" years", "");
-                if (int.TryParse(quickSearch, out int score))
+                if (int.TryParse(quickSearch, out int years))
                 {
-                    videos = await SearchByOlderThanYears(videoType, score);
+                    query = query.Where(w => w.ReleaseDate < DateTime.Now.AddYears(-years));
                 }
             }
             else
             {
-                videos = await SearchByTitleAndDescription(videoType, quickSearch);
+                query = query.Where(w => (w.Title.ToLower().Contains(quickSearch.ToLower()) ||
+                                          w.Description.ToLower().Contains(quickSearch.ToLower())));
             }
+
+            var videos = await query
+                .Select(s => new VideoDto
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Description = s.Description,
+                    ReleaseDate = s.ReleaseDate,
+                    ImageUrl = s.ImageUrl,
+                    Rating = Math.Round(s.Ratings.Average(a => a.Score), 1),
+                    Actors = s.Actors.Select(x => x.FirstName + " " + x.LastName).ToList()
+                })
+                .OrderByDescending(o => o.Rating)
+                .ToListAsync();
 
             return videos;
         }

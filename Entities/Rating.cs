@@ -8,6 +8,7 @@ namespace JAP_Task_Backend.Models
         public int VideoId { get; set; }
         public Video Video { get; set; }
         public int Score { get; set; }
-        public User user { get; set; }
+        public int? UserId { get; set; }
+        public User User { get; set; }
     }
 }
